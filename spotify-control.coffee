@@ -15,7 +15,8 @@
 #   hubot sp pause - pauses the music, play again with sp playtoggle
 #   hubot sp prev - go to previous track
 #   hubot sp next - go to next track
-#   hubot sp open <URI> - not implemented yet
+#   hubot sp open <URI> - opens the spotify URI supplied
+#   hubot sp radio <URI> - starts spotify radio using the given URI as a base
 #   hubot sp current - not implemented yet
 #   hubot sp art - not implemented yet
 #   hubot sp search - not implemented yet
@@ -76,6 +77,21 @@ module.exports = (robot) ->
         iface.OpenUri msg.match[1]
       .catch (err) ->
         msg.send "Error: #{err}"
+
+  robot.respond /sp radio (.*?)$/i, (msg) ->
+    seed = msg.match[1]
+    seedArray = seed.split ":"
+    uriLength = seedArray.length
+    if (uriLength > 1) and (seedArray[0] is "spotify")
+      identifier = seedArray[uriLength - 1]
+      type = seedArray[uriLength - 2]
+      link = "spotify:app:radio:#{type}:#{identifier}"
+      getInterface()
+      .then (iface) ->
+        iface.OpenUri link
+        msg.send "Started the :radio:"
+    else
+      msg.send "Not a valid spotify URL, must start with spotify:"
 
 spotifyPid = () ->
   def = q.defer()
