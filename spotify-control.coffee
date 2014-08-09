@@ -70,6 +70,13 @@ module.exports = (robot) ->
       .catch (err) ->
         msg.send "Error: #{err}"
 
+  robot.respond /sp open (.*?)$/i, (msg) ->
+    getInterface()
+      .then (iface) ->
+        iface.OpenUri msg.match[1]
+      .catch (err) ->
+        msg.send "Error: #{err}"
+
 spotifyPid = () ->
   def = q.defer()
   pidof 'spotify', (err, pid) ->
