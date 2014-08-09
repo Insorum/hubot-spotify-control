@@ -10,7 +10,7 @@
 #   None
 #
 # Commands:
-#   hubot sp playtoggle - toggle the play status
+#   hubot sp play - toggle the play status
 #   hubot sp pause - pauses the music, play again with sp playtoggle
 #   hubot sp prev - go to previous track
 #   hubot sp next - go to next track
@@ -43,7 +43,7 @@ module.exports = (robot) ->
         iface.Pause()
         msg.send ":pause:"
 
-  robot.respond /sp playtoggle$/i, (msg) ->
+  robot.respond /sp play$/i, (msg) ->
     getInterface (err, iface) ->
       if err
         msg.send "Error: #{err}"
@@ -64,7 +64,7 @@ module.exports = (robot) ->
       if err
         msg.send "Error: #{err}"
       else
-        iface.PlayPause()
+        iface.Previous()
         msg.send ":previous:"
 
 
