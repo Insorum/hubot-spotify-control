@@ -5,6 +5,7 @@
 #   "dbus": "0.2.9"
 #   "pidof": "1.0.2",
 #   "properties": "1.2.1"
+#   "q": "1.0.1"
 #
 # Configuration:
 #   None
@@ -26,6 +27,7 @@ pidof = require 'pidof'
 properties = require 'properties'
 fs = require 'fs'
 DBus = require 'dbus'
+q = require 'q'
 
 dbus = new DBus()
 
@@ -36,75 +38,72 @@ memb = 'org.mpris.MediaPlayer2.Player'
 module.exports = (robot) ->
 
   robot.respond /sp pause$/i, (msg) ->
-    getInterface (err, iface) ->
-      if err
-        msg.send "Error: #{err}"
-      else
-        iface.Pause()
-        msg.send ":pause:"
+    getInterface()
+    .then (iface) ->
+      iface.Pause()
+      msg.send ":pause:"
+    .catch (err) ->
+      msg.send "Error: #{err}"
 
   robot.respond /sp play$/i, (msg) ->
-    getInterface (err, iface) ->
-      if err
-        msg.send "Error: #{err}"
-      else
-        iface.PlayPause()
-        msg.send ":playpause:"
+    getInterface()
+    .then (iface) ->
+      iface.PlayPause()
+      msg.send ":playpause:"
+    .catch (err) ->
+      msg.send "Error: #{err}"
 
   robot.respond /sp next$/i, (msg) ->
-    getInterface (err, iface) ->
-      if err
-        msg.send "Error: #{err}"
-      else
+    getInterface()
+      .then (iface) ->
         iface.Next()
         msg.send ":next:"
+      .catch (err) ->
+        msg.send "Error: #{err}"
 
   robot.respond /sp prev$/i, (msg) ->
-    getInterface (err, iface) ->
-      if err
+    getInterface()
+      .then (iface) ->
+        iface.Previous()
+        iface.Previous()
+        msg.send ":previous"
+      .catch (err) ->
         msg.send "Error: #{err}"
-      else
-        #call twice, once to go to start, then again to go to last track
-        iface.Previous()
-        iface.Previous()
-        msg.send ":previous:"
 
-
-spotifyPid = (callback) ->
+spotifyPid = () ->
+  def = q.defer()
   pidof 'spotify', (err, pid) ->
     if err
-      callback err
+      def.reject err
     else if not pid
-      callback "Spotify doesn't seem to be running"
+      def.reject "Spotify doesn't seem to be running"
     else
-      callback err, pid
+      def.resolve pid
+  def.promise
 
-dbusAddress = (callback) ->
-  spotifyPid (err, pid) ->
-    if err
-      callback err
-    else if not pid
-      callback "Spotify doesn't seem to be running"
-    else
-      callback err, pid
+dbusAddress = () ->
+  def = q.defer()
+  spotifyPid()
+  .then (pid) ->
+    file = fs.readFileSync "/proc/#{pid}/environ", {encoding: 'utf-8'}
+    fixedfile = file.replace /\0/g, "\n"
+    parsed = properties.parse fixedfile, {strict: true}
+    process.env['DBUS_SESSION_BUS_ADDRESS'] = parsed['DBUS_SESSION_BUS_ADDRESS']
+    def.resolve()
+  .catch (err) ->
+    def.reject err
+  def.promise
 
-dbusAddress = (callback) ->
-  spotifyPid (err, pid) ->
-    if err
-      callback err
-    else
-      file = fs.readFileSync "/proc/#{pid}/environ", {encoding: 'utf-8'}
-      fixedfile = file.replace /\0/g, "\n"
-      parsed = properties.parse fixedfile, {strict: true}
-      process.env['DBUS_SESSION_BUS_ADDRESS'] = parsed['DBUS_SESSION_BUS_ADDRESS']
-      callback()
-
-getInterface = (callback) ->
-  dbusAddress (err) ->
-    if err
-      callback err
-    else
-      bus = dbus.getBus 'session'
-      bus.getInterface service, path, memb, (err, iface) ->
-        callback err, iface
-
+getInterface = () ->
+  def = q.defer()
+  dbusAddress()
+  .then () ->
+    bus = dbus.getBus 'session'
+    bus.getInterface service, path, memb, (err, iface) ->
+      if err
+        def.reject err
+      else
+        def.resolve iface
+  .catch (err) ->
+    def.reject err
+  def.promise
