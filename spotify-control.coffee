@@ -10,14 +10,14 @@
 #   None
 #
 # Commands:
-#   hubot sp playtoggle
-#   hubot sp pause
-#   hubot sp prev
-#   hubot sp next
-#   hubot sp open <URI>
-#   hubot sp current
-#   hubot sp art
-#   hubot sp search
+#   hubot sp playtoggle - toggle the play status
+#   hubot sp pause - pauses the music, play again with sp playtoggle
+#   hubot sp prev - not implemented yet
+#   hubot sp next - not implemented yet
+#   hubot sp open <URI> - not implemented yet
+#   hubot sp current - not implemented yet
+#   hubot sp art - not implemented yet
+#   hubot sp search - not implemented yet
 #
 # Author:
 #   Eluinhost
