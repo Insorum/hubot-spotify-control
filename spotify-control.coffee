@@ -10,7 +10,7 @@
 #   None
 #
 # Commands:
-#   hubot sp play
+#   hubot sp playtoggle
 #   hubot sp pause
 #   hubot sp prev
 #   hubot sp next
@@ -42,6 +42,15 @@ module.exports = (robot) ->
       else
         iface.Pause()
         msg.send "Music paused"
+
+  robot.respond /sp playtoggle$/i, (msg) ->
+    getInterface (err, iface) ->
+      if err
+        msg.send "Error: #{err}"
+      else
+        iface.PlayPause()
+        msg.send "Play toggled"
+
 
 spotifyPid = (callback) ->
   pidof 'spotify', (err, pid) ->
