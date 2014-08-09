@@ -12,8 +12,8 @@
 # Commands:
 #   hubot sp playtoggle - toggle the play status
 #   hubot sp pause - pauses the music, play again with sp playtoggle
-#   hubot sp prev - not implemented yet
-#   hubot sp next - not implemented yet
+#   hubot sp prev - go to previous track
+#   hubot sp next - go to next track
 #   hubot sp open <URI> - not implemented yet
 #   hubot sp current - not implemented yet
 #   hubot sp art - not implemented yet
@@ -41,7 +41,7 @@ module.exports = (robot) ->
         msg.send "Error: #{err}"
       else
         iface.Pause()
-        msg.send "Music paused"
+        msg.send ":pause:"
 
   robot.respond /sp playtoggle$/i, (msg) ->
     getInterface (err, iface) ->
@@ -49,7 +49,23 @@ module.exports = (robot) ->
         msg.send "Error: #{err}"
       else
         iface.PlayPause()
-        msg.send "Play toggled"
+        msg.send ":playpause:"
+
+  robot.respond /sp next$/i, (msg) ->
+    getInterface (err, iface) ->
+      if err
+        msg.send "Error: #{err}"
+      else
+        iface.Next()
+        msg.send ":next:"
+
+  robot.respond /sp prev$/i, (msg) ->
+    getInterface (err, iface) ->
+      if err
+        msg.send "Error: #{err}"
+      else
+        iface.PlayPause()
+        msg.send ":previous:"
 
 
 spotifyPid = (callback) ->
