@@ -64,6 +64,8 @@ module.exports = (robot) ->
       if err
         msg.send "Error: #{err}"
       else
+        #call twice, once to go to start, then again to go to last track
+        iface.Previous()
         iface.Previous()
         msg.send ":previous:"
 
