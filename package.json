@@ -1,0 +1,32 @@
+{
+    "name": "hubot-spotify-control",
+    "description": "Script for controlling Spotify via DBus on linux",
+    "version": "1.0.0",
+    "author": "Graham Howden <graham_howden1@yahoo.co.uk>",
+    "license": "MIT",
+
+    "keywords": [
+        "hubot",
+        "hubot-scripts",
+        "spotify"
+    ],
+
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Eluinhost/hubot-spotify-control.git"
+    },
+
+    "bugs": {
+        "url": "https://github.com/Eluinhost/hubot-spotify-control/issues"
+    },
+
+    "dependencies": {
+        "coffee-script": "~1.6",
+        "dbus": "~0.2",
+        "pidof": "~1.0",
+        "properties": "~1.2",
+        "q": "~1.0"
+    },
+
+    "main": "index.coffee"
+}

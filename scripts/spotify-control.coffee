@@ -1,29 +1,3 @@
-# Description:
-#   Control a spotify client on Linux
-#
-# Dependencies:
-#   "dbus": "0.2.9"
-#   "pidof": "1.0.2",
-#   "properties": "1.2.1"
-#   "q": "1.0.1"
-#
-# Configuration:
-#   None
-#
-# Commands:
-#   hubot sp play - toggle the play status
-#   hubot sp pause - pauses the music, play again with sp playtoggle
-#   hubot sp prev - go to previous track
-#   hubot sp next - go to next track
-#   hubot sp open <URI> - opens the spotify URI supplied
-#   hubot sp radio <URI> - starts spotify radio using the given URI as a base
-#   hubot sp current - not implemented yet
-#   hubot sp art - not implemented yet
-#   hubot sp search - not implemented yet
-#
-# Author:
-#   Eluinhost
-
 pidof = require 'pidof'
 properties = require 'properties'
 fs = require 'fs'
