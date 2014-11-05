@@ -1,32 +1,45 @@
 {
     "name": "hubot-spotify-control",
+    "version": "0.0.0",
     "description": "Script for controlling Spotify via DBus on linux",
-    "version": "1.0.0",
-    "author": "Graham Howden <graham_howden1@yahoo.co.uk>",
-    "license": "MIT",
-
-    "keywords": [
-        "hubot",
-        "hubot-scripts",
-        "spotify"
-    ],
-
+    "main": "./src/control.coffee",
     "repository": {
         "type": "git",
         "url": "https://github.com/Eluinhost/hubot-spotify-control.git"
     },
-
+    "keywords": [
+        "hubot",
+        "hubot-script",
+        "script",
+        "spotify"
+    ],
+    "author": "Eluinhost",
+    "license": "MIT",
     "bugs": {
         "url": "https://github.com/Eluinhost/hubot-spotify-control/issues"
     },
-
+    "homepage": "https://github.com/Eluinhost/hubot-spotify-control",
+    "scripts": {
+        "test": "grunt test"
+    },
+    "devDependencies": {
+        "chai": "*",
+        "grunt-contrib-watch": "~0.5.3",
+        "grunt-mocha-test": "~0.7.0",
+        "grunt-release": "~0.6.0",
+        "hubot": "^2.9.3",
+        "hubot-mock-adapter": "^1.0.0",
+        "load-grunt-tasks": "*",
+        "mocha": "*",
+        "nock": "^0.48.2",
+        "sinon": "*",
+        "sinon-chai": "*"
+    },
     "dependencies": {
         "coffee-script": "~1.6",
         "dbus": "~0.2",
         "pidof": "~1.0",
         "properties": "~1.2",
         "q": "~1.0"
-    },
-
-    "main": "index.coffee"
+    }
 }
