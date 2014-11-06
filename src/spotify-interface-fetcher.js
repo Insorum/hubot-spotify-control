@@ -2,6 +2,7 @@ var Q = require('q');
 var pidof = require('pidof');
 var properties = require('properties');
 var DBus = require('dbus');
+var fs = require('fs');
 
 /**
  * Fetch interface for DBus usage
