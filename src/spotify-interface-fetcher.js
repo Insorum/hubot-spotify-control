@@ -25,7 +25,7 @@ function InterfaceFetcher(processName, service, path, memb) {
  *
  * @returns {promise} a promise that resolves to the process ID
  */
-InterfaceFetcher.getPid = function() {
+InterfaceFetcher.prototype.getPid = function() {
     var def;
     def = Q.defer();
     pidof(this.processName, function(err, pid) {
@@ -40,7 +40,7 @@ InterfaceFetcher.getPid = function() {
     return def.promise;
 };
 
-InterfaceFetcher.setSessionDbusAddress = function() {
+InterfaceFetcher.prototype.setSessionDbusAddress = function() {
     var def;
     def = Q.defer();
     this.getPid().then(
@@ -58,7 +58,7 @@ InterfaceFetcher.setSessionDbusAddress = function() {
     return def.promise;
 };
 
-InterfaceFetcher.getInterface = function() {
+InterfaceFetcher.prototype.getInterface = function() {
     var def = Q.defer();
     var self = this;
     this.setSessionDbusAddress().then(
