@@ -1,6 +1,6 @@
 {
   "name": "hubot-spotify-control",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Script for controlling Spotify via DBus on linux",
   "main": "./src/spotify-control.js",
   "repository": {
