@@ -63,8 +63,8 @@ InterfaceFetcher.prototype.getInterface = function() {
     var self = this;
     this.setSessionDbusAddress().then(
         function() {
-        var bus = self.dbus.getBus('session');
-            bus.getInterface(this.service, this.path, this.memb, function(err, iface) {
+            var bus = self.dbus.getBus('session');
+            bus.getInterface(self.service, self.path, self.memb, function(err, iface) {
                 if (err) {
                     def.reject(err);
                 } else {
