@@ -1,3 +1,29 @@
+// Description:
+//   Control spotify on linux via DBus
+//
+// Dependencies:
+//   dbus: ~0.2
+//   pidof: ~1.0
+//   properties: ~1.2
+//   q: ~1.0
+//
+// Configuration:
+//   None
+//
+//// Commands:
+//   hubot sp pause
+//   hubot sp play
+//   hubot sp next
+//   hubot sp prev
+//   hubot sp open <URI>
+//   hubot sp radio <URI>
+//
+//  Notes:
+//    Hubot should be running on the same machine and user as the spotify process
+//
+// Author:
+//   Eluinhost
+
 var InterfaceFetcher = require('./spotify-interface-fetcher');
 
 module.exports = function(robot) {
