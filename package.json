@@ -2,7 +2,7 @@
     "name": "hubot-spotify-control",
     "version": "0.0.0",
     "description": "Script for controlling Spotify via DBus on linux",
-    "main": "./src/control.coffee",
+    "main": "./src/spotify-control.js",
     "repository": {
         "type": "git",
         "url": "https://github.com/Eluinhost/hubot-spotify-control.git"
@@ -36,7 +36,6 @@
         "sinon-chai": "*"
     },
     "dependencies": {
-        "coffee-script": "~1.6",
         "dbus": "~0.2",
         "pidof": "~1.0",
         "properties": "~1.2",
