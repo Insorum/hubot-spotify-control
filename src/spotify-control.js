@@ -34,10 +34,10 @@ module.exports = function(robot) {
         interfaceFetcher.getInterface().then(
             function(iface) {
                 iface.Pause();
-                msg.send(":pause:");
+                msg.send(':pause:');
             },
             function(err) {
-                msg.send("Error: " + err);
+                msg.send('Error: ' + err);
             }
         );
     });
@@ -46,10 +46,10 @@ module.exports = function(robot) {
         interfaceFetcher.getInterface().then(
             function(iface) {
                 iface.PlayPause();
-                msg.send(":playpause:");
+                msg.send(':playpause:');
             },
             function(err) {
-                msg.send("Error: " + err);
+                msg.send('Error: ' + err);
             }
         );
     });
@@ -58,10 +58,10 @@ module.exports = function(robot) {
         interfaceFetcher.getInterface().then(
             function(iface) {
                 iface.Next();
-                msg.send(":next:");
+                msg.send(':next:');
             },
             function(err) {
-                msg.send("Error: " + err);
+                msg.send('Error: ' + err);
             }
         );
     });
@@ -71,10 +71,10 @@ module.exports = function(robot) {
             function(iface) {
                 iface.Previous();
                 iface.Previous();
-                msg.send(":previous");
+                msg.send(':previous:');
             },
             function(err) {
-                msg.send("Error: " + err);
+                msg.send('Error: ' + err);
             }
         );
     });
@@ -85,26 +85,26 @@ module.exports = function(robot) {
                 iface.OpenUri(msg.match[1]);
             },
             function(err) {
-                msg.send("Error: " + err);
+                msg.send('Error: ' + err);
             }
         );
     });
 
     robot.respond(/sp radio (.*?)$/i, function(msg) {
         var seed = msg.match[1];
-        var seedArray = seed.split(":");
+        var seedArray = seed.split(':');
         var uriLength = seedArray.length;
-        if ((uriLength > 1) && (seedArray[0] === "spotify")) {
+        if ((uriLength > 1) && (seedArray[0] === 'spotify')) {
             var identifier = seedArray[uriLength - 1];
             var type = seedArray[uriLength - 2];
-            var link = "spotify:app:radio:" + type + ":" + identifier;
+            var link = 'spotify:app:radio:' + type + ':' + identifier;
             interfaceFetcher.getInterface().then(
                 function(iface) {
                     iface.OpenUri(link);
-                    msg.send("Started the :radio:");
+                    msg.send('Started the :radio:');
                 },
                 function(err) {
-                    msg.send("Error: " + err);
+                    msg.send('Error: ' + err);
                 }
             );
         } else {
