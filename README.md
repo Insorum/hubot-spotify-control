@@ -1,7 +1,7 @@
 Hubot Spotify Control
 =====================
 
-[![Build Status](https://travis-ci.org/Eluinhost/hubot-spotify-control.svg)](https://travis-ci.org/Eluinhost/hubot-spotify-control)
+[![Build Status](https://travis-ci.org/Insorum/hubot-spotify-control.svg)](https://travis-ci.org/Insorum/hubot-spotify-control)
 
 This script allows use of spotify via DBus on linux machines.
 

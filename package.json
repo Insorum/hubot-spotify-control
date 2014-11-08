@@ -5,7 +5,7 @@
   "main": "./src/spotify-control.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Eluinhost/hubot-spotify-control.git"
+    "url": "https://github.com/Insorum/hubot-spotify-control.git"
   },
   "keywords": [
     "hubot",
@@ -16,9 +16,9 @@
   "author": "Eluinhost",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Eluinhost/hubot-spotify-control/issues"
+    "url": "https://github.com/Insorum/hubot-spotify-control/issues"
   },
-  "homepage": "https://github.com/Eluinhost/hubot-spotify-control",
+  "homepage": "https://github.com/Insorum/hubot-spotify-control",
   "scripts": {
     "test": "grunt test"
   },
