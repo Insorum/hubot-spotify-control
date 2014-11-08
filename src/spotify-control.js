@@ -8,7 +8,7 @@
 //   q: ~1.0
 //
 // Configuration:
-//   None
+//   HUBOT_SPOTIFY_SLACK_SUPPORT - if set will use slack attachments to send the message, otherwise just a regular message
 //
 //// Commands:
 //   hubot sp pause
@@ -28,10 +28,17 @@ var InterfaceFetcher = require('./spotify-interface-fetcher');
 
 module.exports = function(robot) {
 
-    var interfaceFetcher = new InterfaceFetcher('spotify', 'org.mpris.MediaPlayer2.spotify', '/org/mpris/MediaPlayer2', 'org.mpris.MediaPlayer2.Player');
+    var processName = 'spotify';
+    var service = 'org.mpris.MediaPlayer2.spotify';
+    var path = '/org/mpris/MediaPlayer2';
+    var playerMemb = 'org.mpris.MediaPlayer2.Player';
+    var propertiesMemb = 'org.freedesktop.DBus.Properties';
+
+    var mediaInterface = new InterfaceFetcher(processName, service, path, playerMemb);
+    var dbusPropertiesInterface = new InterfaceFetcher(processName, service, path, propertiesMemb);
 
     robot.respond(/sp pause$/i, function(msg) {
-        interfaceFetcher.getInterface().then(
+        mediaInterface.getInterface().then(
             function(iface) {
                 iface.Pause();
                 msg.send(':pause:');
@@ -43,7 +50,7 @@ module.exports = function(robot) {
     });
 
     robot.respond(/sp play$/i, function(msg) {
-        interfaceFetcher.getInterface().then(
+        mediaInterface.getInterface().then(
             function(iface) {
                 iface.PlayPause();
                 msg.send(':playpause:');
@@ -55,7 +62,7 @@ module.exports = function(robot) {
     });
 
     robot.respond(/sp next$/i, function(msg) {
-        interfaceFetcher.getInterface().then(
+        mediaInterface.getInterface().then(
             function(iface) {
                 iface.Next();
                 msg.send(':next:');
@@ -67,7 +74,7 @@ module.exports = function(robot) {
     });
 
     robot.respond(/sp prev$/i, function(msg) {
-        interfaceFetcher.getInterface().then(
+        mediaInterface.getInterface().then(
             function(iface) {
                 iface.Previous();
                 iface.Previous();
@@ -80,12 +87,51 @@ module.exports = function(robot) {
     });
 
     robot.respond(/sp open (.*?)$/i, function(msg) {
-        interfaceFetcher.getInterface().then(
+        mediaInterface.getInterface().then(
             function(iface) {
                 iface.OpenUri(msg.match[1]);
             },
             function(err) {
                 msg.send('Error: ' + err);
+            }
+        );
+    });
+
+    robot.respond(/sp current$/i, function(msg) {
+        dbusPropertiesInterface.getInterface().then(
+            function(iface) {
+                iface.Get['finish'] = function(meta) {
+                    var artist = meta['xesam:artist'].join(', ');
+                    var album = meta['xesam:album'];
+                    var title = meta['xesam:title'];
+                    var art = '<' + meta['mpris:artUrl'] + '|Album Art>';
+
+                    if(process.env.HUBOT_SPOTIFY_SLACK_SUPPORT) {
+                        var payload = {
+                            message: msg.message,
+                            content: {
+                                fallback: 'Current playing track',
+                                pretext: 'Current playing track (' + new Date() + ')',
+                                color: 'good',
+                                fields: [
+                                    {"title": "Track", "value": title},
+                                    {"title": "Artist", "value": artist},
+                                    {"title": "Album", "value": album},
+                                    {"title": "Album Art", "value": art}
+                                ]
+                            }
+                        };
+
+                        robot.emit('slack-attachment', payload);
+                    } else {
+                        msg.send('*Track:* ' + title + ' *Artist:* ' + artist + ' *Album:* ' + album);
+                        msg.send('*Album Art:* ' + art);
+                    }
+                };
+                iface.Get(playerMemb, 'Metadata');
+            },
+            function(err) {
+                msg.send('Failed to fetch interface: ' + err);
             }
         );
     });
@@ -98,7 +144,7 @@ module.exports = function(robot) {
             var identifier = seedArray[uriLength - 1];
             var type = seedArray[uriLength - 2];
             var link = 'spotify:app:radio:' + type + ':' + identifier;
-            interfaceFetcher.getInterface().then(
+            mediaInterface.getInterface().then(
                 function(iface) {
                     iface.OpenUri(link);
                     msg.send('Started the :radio:');

@@ -5,6 +5,11 @@ This script allows use of spotify via DBus on linux machines.
 
 Hubot must be running as the same user as the spotify instance.
 
+Configuration
+-------------
+
+`HUBOT_SPOTIFY_SLACK_SUPPORT` - if set will use slack attachments to send the message, otherwise just a regular message
+
 Commands
 --------
 
@@ -22,11 +27,8 @@ Commands:
 
 `hubot sp radio <URI>` - starts spotify radio using the given URI as a base (e.g. starts with spotify:*)
 
+`hubot sp current` - Shows current playing track
 
 TODO:
-
-`hubot sp current` - not implemented yet
-
-`hubot sp art` - not implemented yet
 
 `hubot sp search` - not implemented yet
