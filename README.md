@@ -1,8 +1,6 @@
 Hubot Spotify Control
 =====================
 
-[![Build Status](https://travis-ci.org/Insorum/hubot-spotify-control.svg)](https://travis-ci.org/Insorum/hubot-spotify-control)
-
 This script allows use of spotify via DBus on linux machines.
 
 Hubot must be running as the same user as the spotify instance.
