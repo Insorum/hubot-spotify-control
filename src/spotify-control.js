@@ -6,6 +6,7 @@
 //   pidof: ~1.0
 //   properties: ~1.2
 //   q: ~1.0
+//   request: ~2.47.0
 //
 // Configuration:
 //   HUBOT_SPOTIFY_SLACK_SUPPORT - if set will use slack attachments to send the message, otherwise just a regular message
@@ -23,7 +24,8 @@
 //
 // Author:
 //   Eluinhost
-
+var request = require('request');
+var Q = require('q');
 var InterfaceFetcher = require('./spotify-interface-fetcher');
 
 module.exports = function(robot) {
@@ -97,6 +99,17 @@ module.exports = function(robot) {
         );
     });
 
+    var expandUrl = function(short) {
+        var def = Q.defer();
+        request.get(short, null, function(err, res, body) {
+            if(err) {
+                def.resolve(short);
+            }
+            def.resolve(res.request.uri.href);
+        });
+        return def.promise;
+    };
+
     robot.respond(/sp current$/i, function(msg) {
         dbusPropertiesInterface.getInterface().then(
             function(iface) {
@@ -104,29 +117,39 @@ module.exports = function(robot) {
                     var artist = meta['xesam:artist'].join(', ');
                     var album = meta['xesam:album'];
                     var title = meta['xesam:title'];
-                    var art = '<' + meta['mpris:artUrl'] + '|Album Art>';
+                    var art = meta['mpris:artUrl'];
 
-                    if(process.env.HUBOT_SPOTIFY_SLACK_SUPPORT) {
-                        var payload = {
-                            message: msg.message,
-                            content: {
-                                fallback: 'Current playing track',
-                                pretext: 'Current playing track (' + new Date() + ')',
-                                color: 'good',
-                                fields: [
-                                    {"title": "Track", "value": title},
-                                    {"title": "Artist", "value": artist},
-                                    {"title": "Album", "value": album},
-                                    {"title": "Album Art", "value": art}
-                                ]
+                    expandUrl(art).then(
+                        function (longUrl) {
+                            art = longUrl;
+                        }
+                    ).finally(
+                        function () {
+                            art = '<' + art + '|Art>';
+                            if (process.env.HUBOT_SPOTIFY_SLACK_SUPPORT) {
+                                var payload = {
+                                    message: msg.message,
+                                    content: {
+                                        fallback: 'Current playing track',
+                                        pretext: 'Current playing track (' + new Date() + ')',
+                                        color: 'good',
+                                        fields: [
+                                            {"title": "Track", "value": title},
+                                            {"title": "Artist", "value": artist},
+                                            {"title": "Album", "value": album},
+                                            {"title": "Album Art", "value": art}
+                                        ]
+                                    }
+                                };
+
+                                robot.emit('slack-attachment', payload);
+                                msg.send(art);
+                            } else {
+                                msg.send('*Track:* ' + title + ' *Artist:* ' + artist + ' *Album:* ' + album);
+                                msg.send('*Album Art:* ' + art);
                             }
-                        };
-
-                        robot.emit('slack-attachment', payload);
-                    } else {
-                        msg.send('*Track:* ' + title + ' *Artist:* ' + artist + ' *Album:* ' + album);
-                        msg.send('*Album Art:* ' + art);
-                    }
+                        }
+                    );
                 };
                 iface.Get(playerMemb, 'Metadata');
             },
