@@ -1,6 +1,6 @@
 {
   "name": "hubot-spotify-control",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "Script for controlling Spotify via DBus on linux",
   "main": "./src/spotify-control.js",
   "repository": {
@@ -19,27 +19,11 @@
     "url": "https://github.com/Insorum/hubot-spotify-control/issues"
   },
   "homepage": "https://github.com/Insorum/hubot-spotify-control",
-  "scripts": {
-    "test": "grunt test"
-  },
-  "devDependencies": {
-    "chai": "*",
-    "grunt-contrib-watch": "~0.5.3",
-    "grunt-mocha-test": "~0.7.0",
-    "grunt-release": "~0.6.0",
-    "hubot": "^2.9.3",
-    "hubot-mock-adapter": "^1.0.0",
-    "load-grunt-tasks": "*",
-    "mocha": "*",
-    "nock": "^0.48.2",
-    "sinon": "*",
-    "sinon-chai": "*"
-  },
   "dependencies": {
-    "dbus": "~0.2",
-    "pidof": "~1.0",
-    "properties": "~1.2",
-    "q": "~1.0",
-    "request": "~2.47.0"
+    "dbus-native": "0.2.x",
+    "pidof": "1.0.x",
+    "properties": "1.2.x",
+    "bluebird": "3.1.x",
+    "request": "2.67.x"
   }
 }
